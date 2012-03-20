@@ -69,6 +69,6 @@
         };
     };
     
-    // `Belt` is too clever for its own good, but it's short. The global name would more likely be something like `ProjecnametUtility` in a real environment. I'd probably use `utility.js` as the file-name, too.
+    // `Belt` is too clever for its own good, but it's short. The global name would more likely be something like `ProjectnameUtility` in a real environment. I'd probably use `utility.js` as the file-name, too.
     root.Belt = new Utility();
 }(this));
