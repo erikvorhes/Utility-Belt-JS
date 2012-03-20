@@ -61,9 +61,9 @@
         
         // Wrap addEventListener and the old IE approach to save some redundant repetition (ha!):
         self.newEventListener = function newEventListener(el, ev, callback, capture) {
-            if (el.addEventListener) {
+            if (!!el.addEventListener) {
                 el.addEventListener(ev, callback, (!!capture));
-            } else if (el.attachEvent) {
+            } else if (!!el.attachEvent) {
                 el.attachEvent(("on" + ev), callback);
             }
         };
