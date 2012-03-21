@@ -7,8 +7,8 @@ Not much to say here, but **utility-belt.js** is a simple wrapper for some commo
 * Add a class to an element with `Belt.addClass(className, el);`
 * Remove a class from an element with  `Belt.removeClass(className, el);`
 * See whether an element has a certain class with `Belt.hasClass(className, el);`
-* Get all elements that have a certain class with `Belt.getElementsByClassName(className, domNode);`
-* Add an event listener with `Belt.newEventListener(el, evt, callback, capture);` (oh, and `capture` defaults to `false`)
+* Get all elements that have a certain class with `Belt.getElementsByClassName(className, domNode);` (`domNode` defaults to `document`)
+* Add an event listener with `Belt.newEventListener(el, evt, callback, capture);` (`capture` defaults to `false`)
 
 That's it so far.
 
