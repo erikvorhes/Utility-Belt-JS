@@ -4,18 +4,21 @@
     var Utility = function Utility() {
         var self = this;
         
-        // Regex to find a class within .className
+        // Regex to find a class within el.className:
         self.filterClass = function findClass(cls) {
             return new RegExp("(^|\\s)" + cls + "(\\s|$)", "i");
         }
         
-        // Boolean: does the el have a certain class?
+        // Say whether a specific class name is in el.className:
         self.hasClass = function hasClass(cls, el) {
             var findClass = self.filterClass(cls);
-            return el.className && findClass.test(el.className);
+            if (el.className && findClass.test(el.className)) {
+                return true;
+            }
+            return false;
         }
         
-        // Add a class to the el:
+        // Add a class name to el.className:
         self.addClass = function addClass(cls, el) {
             if (!!el.classList) {
                 el.classList.add(cls);
@@ -24,7 +27,7 @@
             }
         };
         
-        // Remove a class from the el:
+        // Remove a class name from el.className:
         self.removeClass = function removeClass(cls, el) {
             var rc;
             if (!!el.classList) {
@@ -35,36 +38,40 @@
             }
         };
         
-        // Get elements by class name, handy but inefficient in older browsers:
+        // Get elements by class name, unfortunately inefficient in older browsers:
         self.getElementsByClassName = function getElementsByClassName(cls, domNode) {
             var node = domNode || document,
-                els,
-                allEls,
+                descendants,
+                descendantsWithClass,
                 i;
-            if (!!node.getElementsByClassName) {
+            if (!!node.getElementsByClassName) {// Faster than node.querySelectorAll
                 return node.getElementsByClassName(cls);
-            } else if (!!node.querySelectorAll) {
+            } else if (!!node.querySelectorAll) {// Much faster than what's in `else`
                 return node.querySelectorAll("." + cls);
             } else {
-                allEls = node.getElementsByTagName("*");
-                els = [];
-                i = allEls.length;
+                descendantsWithClass = [];
+                descendants = node.getElementsByTagName("*");
+                i = descendants.length;
                 while (i--) {
-                    if (self.hasClass(cls, allEls[i])) {
-                        els.push(allEls[i]);
+                    if (self.hasClass(cls, descendants[i])) {
+                        descendantsWithClass.push(descendants[i]);
                     }
                 }
-                return els.reverse();
+                if (!descendantsWithClass.length) {
+                    return null;
+                }
+                return descendantsWithClass.reverse();// Since this uses `while`, `reverse()` returns a consistent order w/ the other ways to get these els.
             }
             return null;
         };
         
-        // Wrap addEventListener and the old IE approach to save some redundant repetition (ha!):
-        self.newEventListener = function newEventListener(el, ev, callback, capture) {
-            if (!!el.addEventListener) {
-                el.addEventListener(ev, callback, (!!capture));
-            } else if (!!el.attachEvent) {
-                el.attachEvent(("on" + ev), callback);
+        // Wrap addEventListener and the old IE approach to save some redundant repetition (ha!).
+        // Note that `this` is different in an event fired in IE's node.attachEvent, so be careful.
+        self.newEventListener = function newEventListener(node, ev, callback, capture) {
+            if (!!node.addEventListener) {
+                node.addEventListener(ev, callback, (!!capture));
+            } else if (!!node.attachEvent) {
+                node.attachEvent(("on" + ev), callback);
             }
         };
     };
