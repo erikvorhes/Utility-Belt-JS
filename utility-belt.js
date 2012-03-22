@@ -11,7 +11,7 @@
     _canGetElementsByClassName = !!doc.getElementsByClassName;
     _canQuerySelectorAll = !!doc.querySelectorAll;
     _canUseClassList = (function _canUseClassList() {
-        var div = document.createElement("div");
+        var div = doc.createElement("div");
         return !!div.classList;
     }());
     _canAddEventListener = !!root.addEventListener;
