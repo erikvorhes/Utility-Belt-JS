@@ -2,20 +2,24 @@
     "use strict";
     
     var Utility,
-        _canGetElementsByClassName,
-        _canQuerySelectorAll,
-        _canUseClassList,
-        _canAddEventListener,
-        _canAttachEvent;
+        _supportsGetElementsByClassName,
+        _supportsQuerySelectorAll,
+        _supportsUseClassList,
+        _supportsAddEventListener,
+        _supportsAttachEvent,
+        _DOMContentLoaded,
+        _onReadyStateChange;
     
-    _canGetElementsByClassName = !!doc.getElementsByClassName;
-    _canQuerySelectorAll = !!doc.querySelectorAll;
-    _canUseClassList = (function _canUseClassList() {
-        var div = doc.createElement("div");
+    _supportsGetElementsByClassName = !!doc.getElementsByClassName;
+    _supportsQuerySelectorAll = !!doc.querySelectorAll;
+    _supportsUseClassList = (function _supportsUseClassList() {
+        var div = document.createElement("div");
         return !!div.classList;
     }());
-    _canAddEventListener = !!root.addEventListener;
-    _canAttachEvent = !!root.attachEvent;
+    _supportsAddEventListener = !!root.addEventListener;
+    _supportsAttachEvent = !!root.attachEvent;
+    _DOMContentLoaded = "DOMContentLoaded";
+    _onReadyStateChange = "onreadystatechange";
     
     Utility = function Utility() {
         var self = this;
@@ -36,7 +40,7 @@
         
         // Add a class name to el.className:
         self.addClass = function addClass(cls, el) {
-            if (_canUseClassList) {
+            if (_supportsUseClassList) {
                 el.classList.add(cls);
             } else {
                 el.className += (" " + cls);
@@ -46,7 +50,7 @@
         // Remove a class name from el.className:
         self.removeClass = function removeClass(cls, el) {
             var rc;
-            if (_canUseClassList) {
+            if (_supportsUseClassList) {
                 el.classList.remove(cls);
             } else {
                 rc = self.filterClass(cls);
@@ -60,9 +64,9 @@
                 descendants,
                 descendantsWithClass,
                 i;
-            if (_canGetElementsByClassName) {// Faster than node.querySelectorAll
+            if (_supportsGetElementsByClassName) {// Faster than node.querySelectorAll
                 return node.getElementsByClassName(cls);
-            } else if (_canQuerySelectorAll) {// Much faster than what's in `else`
+            } else if (_supportsQuerySelectorAll) {// Much faster than what's in `else`
                 return node.querySelectorAll("." + cls);
             } else {
                 descendantsWithClass = [];
@@ -84,10 +88,27 @@
         // Wrap addEventListener and the old IE approach to save some redundant repetition (ha!).
         // Note that `this` is different in an event fired in IE's node.attachEvent, so be careful.
         self.newEventListener = function newEventListener(node, ev, callback, capture) {
-            if (_canAddEventListener) {
+            if (_supportsAddEventListener) {
                 node.addEventListener(ev, callback, (!!capture));
-            } else if (_canAttachEvent) {
+            } else if (_supportsAttachEvent) {
                 node.attachEvent(("on" + ev), callback);
+            }
+        };
+        
+        // Fire func when DOM is loaded:
+        self.domReady = function domReady(func) {
+            if (_supportsAddEventListener) {
+                doc.addEventListener(_DOMContentLoaded, function() {
+                    doc.removeEventListener(_DOMContentLoaded, arguments.callee, false);
+                    func();
+                });
+            } else if (_supportsAttachEvent) {
+                doc.attachEvent(_onReadyStateChange, function() {
+                    if (doc.readyState === "complete") {
+                        doc.detachEvent(_onReadyStateChange, arguments.callee);
+                        func();
+                    }
+                });
             }
         };
     };
