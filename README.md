@@ -9,6 +9,7 @@ Not much to say here, but **utility-belt.js** is a simple wrapper for some commo
 * See whether an element has a certain class with `Belt.hasClass(className, el);`
 * Get all elements that have a certain class with `Belt.getElementsByClassName(className, domNode);` (`domNode` defaults to `document`)
 * Add an event listener with `Belt.newEventListener(el, evt, callback, capture);` (`capture` defaults to `false`)
+* Fire a function when the DOM has loaded (before `window.onload`) with `Belt.domready(function);`
 
 That's it so far.
 
