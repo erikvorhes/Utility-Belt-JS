@@ -4,7 +4,7 @@
     var Utility,
         _supportsGetElementsByClassName,
         _supportsQuerySelectorAll,
-        _supportsUseClassList,
+        _supportsClassList,
         _supportsAddEventListener,
         _supportsAttachEvent,
         _DOMContentLoaded,
@@ -12,7 +12,7 @@
     
     _supportsGetElementsByClassName = !!doc.getElementsByClassName;
     _supportsQuerySelectorAll = !!doc.querySelectorAll;
-    _supportsUseClassList = (function _supportsUseClassList() {
+    _supportsClassList = (function _supportsClassList() {
         var div = document.createElement("div");
         return !!div.classList;
     }());
@@ -40,7 +40,7 @@
         
         // Add a class name to el.className:
         self.addClass = function addClass(cls, el) {
-            if (_supportsUseClassList) {
+            if (_supportsClassList) {
                 el.classList.add(cls);
             } else {
                 el.className += (" " + cls);
@@ -50,7 +50,7 @@
         // Remove a class name from el.className:
         self.removeClass = function removeClass(cls, el) {
             var rc;
-            if (_supportsUseClassList) {
+            if (_supportsClassList) {
                 el.classList.remove(cls);
             } else {
                 rc = self.filterClass(cls);
@@ -93,6 +93,21 @@
             } else if (_supportsAttachEvent) {
                 node.attachEvent(("on" + ev), callback);
             }
+        };
+        
+        // Wrapper for event delegation:
+        self.delegate = function delegate(node, ev, targetEl, elFilter, func) {
+            var funcCall,
+                filter = elFilter || false; // Probably not the best way.
+            // How best to allow this to delegate to a class or attribute selector?
+            funcCall = function funcCall() {
+                if (node.nodeName.toLowerCase() !== targetEl.toLowerCase()) {
+                    return;
+                }
+                func();
+            };
+            
+            self.newEventListener(node, ev, funcCall, false);
         };
         
         // Fire func when DOM is loaded:
