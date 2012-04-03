@@ -13,4 +13,6 @@ Not much to say here, but **utility-belt.js** is a simple wrapper for some commo
 
 That's it so far.
 
-MIT License, I'll link to something if I feel like it. Enjoy!
+Licensed using the [MIT License][mit]
+
+[mit]: https://github.com/erikvorhes/mit-license
