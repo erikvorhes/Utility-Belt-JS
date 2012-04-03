@@ -95,10 +95,9 @@
             }
         };
         
-        // Wrapper for event delegation:
-        self.delegate = function delegate(node, ev, targetEl, elFilter, func) {
-            var funcCall,
-                filter = elFilter || false; // Probably not the best way.
+        // Wrapper for very basic event delegation:
+        self.delegate = function delegate(node, ev, targetEl, func) {
+            var funcCall;
             // How best to allow this to delegate to a class or attribute selector?
             funcCall = function funcCall() {
                 if (node.nodeName.toLowerCase() !== targetEl.toLowerCase()) {
