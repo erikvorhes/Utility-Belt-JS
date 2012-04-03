@@ -95,20 +95,6 @@
             }
         };
         
-        // Wrapper for very basic event delegation:
-        self.delegate = function delegate(node, ev, targetEl, func) {
-            var funcCall;
-            // How best to allow this to delegate to a class or attribute selector?
-            funcCall = function funcCall() {
-                if (node.nodeName.toLowerCase() !== targetEl.toLowerCase()) {
-                    return;
-                }
-                func();
-            };
-            
-            self.newEventListener(node, ev, funcCall, false);
-        };
-        
         // Fire func when DOM is loaded:
         self.domReady = function domReady(func) {
             if (_supportsAddEventListener) {
