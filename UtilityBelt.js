@@ -74,7 +74,7 @@ class UtilityBelt {
    * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/attachEvent --
    * so be careful if you need to support really old browsers.
    */
-  addEventListener = (eventTarget, event, callback, capture) {
+  addEventListener = (eventTarget, event, callback, capture) => {
     if (this.__supportsAddEventListener) {
       eventTarget.addEventListener(event, callback, !!capture);
     } else if (this.__supportsAttachEvent) {
@@ -82,8 +82,6 @@ class UtilityBelt {
     } else {
       console && console.warn('`newEventListener(...)` is unsupported.');
     }
-
-
   }
 
   onDOMReady = (callback) => {
