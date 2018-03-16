@@ -59,7 +59,7 @@ class UtilityBelt {
 
     const descendantsWithClass = [];
     element.getElementsByTagName("*").forEach((node) => {
-      if (this.hasClass(className, node)) {
+      if (this.hasClassName(className, node)) {
         descendantsWithClass.push(node);
       }
     });
