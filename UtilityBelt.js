@@ -57,14 +57,9 @@ class UtilityBelt {
       return element.querySelectorAll(`.${className}`);
     }
 
-    const descendantsWithClass = [];
-    element.getElementsByTagName("*").forEach((node) => {
-      if (this.hasClassName(className, node)) {
-        descendantsWithClass.push(node);
-      }
-    });
-
-    return descendantsWithClass;
+    return element.getElementsByTagName("*").filter(
+      node => this.hasClassName(className, node)
+    );
   }
 
   /**
