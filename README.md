@@ -16,4 +16,4 @@ Not much to say here, but **UtilityBelt.js** is a simple wrapper to support comm
 
 Licensed using the [MIT License][mit].
 
-[mit]: https://github.com/erikvorhes/mit-license
+[mit]: https://erikvorhes.mit-license.org
